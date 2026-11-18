@@ -1,0 +1,42 @@
+# Copies the dataset from the Declaroad API every night and commits it when it
+# changed. With the secret HF_TOKEN and the variable HF_REPO (as in
+# declaroad/travel-entry-rules) set, it mirrors the same files to Hugging Face.
+name: sync
+
+on:
+  schedule:
+    - cron: "30 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python fetch.py
+      - name: commit if changed
+        run: |
+          git add data
+          if git diff --cached --quiet; then
+            echo "no change"
+            exit 0
+          fi
+          git config user.name "declaroad-bot"
+          git config user.email "declaroad-bot@users.noreply.github.com"
+          git commit -m "Data of $(date -u +%F)"
+          git push
+      - name: mirror to Hugging Face
+        if: ${{ env.HF_TOKEN != '' && vars.HF_REPO != '' }}
+        run: |
+          pip install --quiet "huggingface_hub>=1.0"
+          hf upload "${{ vars.HF_REPO }}" . . --repo-type dataset \
+            --include "data/**" --include README.md --include LICENSE --delete "data/**" \
+            --commit-message "Data of $(date -u +%F)"

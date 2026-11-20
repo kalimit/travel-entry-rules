@@ -59,5 +59,6 @@ reference, not legal advice: check the source before you rely on a rule.
 [CC BY 4.0](LICENSE). Please credit **Declaroad** with a link to
 https://declaroad.com.
 
-The live data is also available as a JSON API (`https://declaroad.com/v1/`) and
-as an MCP server for AI assistants (`https://declaroad.com/mcp`).
+The live data is also available as a JSON API (`https://declaroad.com/v1/meta`) and
+as an MCP server for AI assistants (`https://declaroad.com/mcp`, POST only; how to call both is in `https://declaroad.com/llms.txt`).
+

@@ -6,7 +6,7 @@ tags: [travel, visa, customs, immigration, law]
 size_categories: [n<1K]
 configs:
   - config_name: visas
-    data_files: data/visas.csv
+    data_files: data/visas/en.jsonl
     default: true
   - config_name: rules
     data_files: data/rules/en.jsonl
@@ -61,4 +61,3 @@ https://declaroad.com.
 
 The live data is also available as a JSON API (`https://declaroad.com/v1/meta`) and
 as an MCP server for AI assistants (`https://declaroad.com/mcp`, POST only; how to call both is in `https://declaroad.com/llms.txt`).
-
